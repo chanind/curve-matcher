@@ -1,7 +1,7 @@
 import {
   extendPointOnLine,
-  subdivideCurve,
-  rebalanceCurve
+  rebalanceCurve,
+  subdivideCurve
 } from '../src/geometry';
 
 describe('extendPointOnLine', () => {
@@ -57,6 +57,15 @@ describe('subdivideCurve', () => {
       { x: 2, y: 6 },
       { x: 1, y: 7 },
       { x: 0, y: 8 }
+    ]);
+  });
+
+  it('uses maxLen of 0.05 by default', () => {
+    const curve = [{ x: 0, y: 0 }, { x: 0, y: 0.1 }];
+    expect(subdivideCurve(curve)).toEqual([
+      { x: 0, y: 0 },
+      { x: 0, y: 0.05 },
+      { x: 0, y: 0.1 }
     ]);
   });
 });

@@ -64,6 +64,29 @@ describe('shapeSimilarity', () => {
     });
   });
 
+  it('allows overriding rotations and estimationPoints to tradeoff accuracy and speed', () => {
+    const curve1 = [{ x: 0, y: 0 }, { x: 2, y: 4 }, { x: 18, y: -3 }];
+    const curve2 = [{ x: 0.3, y: -0.2 }, { x: 2.2, y: 4.5 }, { x: 16, y: -4 }];
+    rotations.forEach(theta => {
+      translations.forEach(translation => {
+        scales.forEach(scale => {
+          const newCurve2 = translateScaleAndRotate(
+            curve2,
+            translation,
+            scale,
+            theta
+          );
+          expect(
+            shapeSimilarity(curve1, newCurve2, {
+              rotations: 0,
+              estimationPoints: 10
+            })
+          ).toBeGreaterThan(0.8);
+        });
+      });
+    });
+  });
+
   it('returns low numbers for curves with dissimilar shapes', () => {
     // triangle shape
     const curve1 = [

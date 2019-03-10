@@ -51,7 +51,7 @@ export interface SubdivideCurveOpts {
  */
 export const subdivideCurve = (
   curve: Curve,
-  { maxLen = 0.05 }: SubdivideCurveOpts
+  { maxLen = 0.05 }: SubdivideCurveOpts = {}
 ): Curve => {
   const newCurve = curve.slice(0, 1);
   curve.slice(1).forEach(point => {
