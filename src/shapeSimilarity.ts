@@ -22,8 +22,9 @@ export interface ShapeSimilarityOpts {
 export const shapeSimilarity = (
   curve1: Curve,
   curve2: Curve,
-  { estimationPoints = 50, rotations = 10 }: ShapeSimilarityOpts = {}
+  options: ShapeSimilarityOpts = {}
 ): number => {
+  const { estimationPoints = 50, rotations = 10 } = options;
   const normalizedCurve1 = procrustesNormalizeCurve(curve1, {
     estimationPoints
   });

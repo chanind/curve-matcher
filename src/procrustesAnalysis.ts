@@ -22,8 +22,9 @@ export interface ProcrustesNormalizeCurveOpts {
  */
 export const procrustesNormalizeCurve = (
   curve: Curve,
-  { rebalance = true, estimationPoints = 50 }: ProcrustesNormalizeCurveOpts = {}
+  options: ProcrustesNormalizeCurveOpts = {}
 ) => {
+  const { rebalance = true, estimationPoints = 50 } = options;
   const balancedCurve = rebalance
     ? rebalanceCurve(curve, { numPoints: estimationPoints })
     : curve;

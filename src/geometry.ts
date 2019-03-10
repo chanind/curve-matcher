@@ -7,6 +7,7 @@ export interface Point {
 
 export type Curve = Point[];
 
+/** @hidden */
 export const subtract = (v1: Point, v2: Point): Point => ({
   x: v1.x - v2.x,
   y: v1.y - v2.y
@@ -15,9 +16,18 @@ export const subtract = (v1: Point, v2: Point): Point => ({
 const magnitude = (vector: Point) =>
   Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
 
+/**
+ * Calculate the distance between 2 points
+ * @param point1
+ * @param point2
+ */
 export const pointDistance = (point1: Point, point2: Point) =>
   magnitude(subtract(point1, point2));
 
+/**
+ * calculate the length of the curve
+ * @param points
+ */
 export const curveLength = (points: Curve) => {
   let lastPoint = points[0];
   const pointsSansFirst = points.slice(1);
@@ -27,6 +37,7 @@ export const curveLength = (points: Curve) => {
     return acc + dist;
   }, 0);
 };
+
 /**
  * return a new point, p3, which is on the same line as p1 and p2, but <dist> away from p2
  * p1, p2, p3 will always lie on the line in that order (as long as dist is positive)
@@ -51,8 +62,9 @@ export interface SubdivideCurveOpts {
  */
 export const subdivideCurve = (
   curve: Curve,
-  { maxLen = 0.05 }: SubdivideCurveOpts = {}
+  options: SubdivideCurveOpts = {}
 ): Curve => {
+  const { maxLen = 0.05 } = options;
   const newCurve = curve.slice(0, 1);
   curve.slice(1).forEach(point => {
     const prevPoint = newCurve[newCurve.length - 1];
@@ -84,8 +96,9 @@ export interface RebalanceCurveOpts {
  */
 export const rebalanceCurve = (
   curve: Curve,
-  { numPoints = 50 }: RebalanceCurveOpts
+  options: RebalanceCurveOpts
 ): Curve => {
+  const { numPoints = 50 } = options;
   const curveLen = curveLength(curve);
   const segmentLen = curveLen / (numPoints - 1);
   const outlinePoints = [curve[0]];

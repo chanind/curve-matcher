@@ -64,3 +64,4 @@ typings/
 
 dist
 docs
+.DS_Store
