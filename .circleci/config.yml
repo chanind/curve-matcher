@@ -1,4 +1,13 @@
 version: 2
+
+.restore-cache: &restore_cache
+  restore_cache:
+    name: Restoring Node Modules Cache
+    keys:
+      - v1-node_modules-{{ checksum "yarn.lock" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-node_modules-
+
 jobs:
   build:
     docker:
@@ -8,14 +17,7 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+      - <<: *restore_cache
       - run: yarn install
 
       - save_cache:
@@ -27,3 +29,14 @@ jobs:
       - run: yarn build
       - run: yarn test
       - run: yarn report-coverage
+
+  docs:
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - <<: *restore_cache
+      - run: yarn install
+      - run: yarn build
+      - run: yarn deploy-docs
