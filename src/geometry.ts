@@ -127,7 +127,7 @@ export interface ITranslateAndScaleCurveOpts {
  */
 export const rotateCurve = (curve: Curve, theta: number): Curve => {
   return curve.map(point => ({
-    x: Math.cos(theta) * point.x - Math.sin(theta) * point.y,
-    y: Math.sin(theta) * point.x + Math.cos(theta) * point.y
+    x: Math.cos(-1 * theta) * point.x - Math.sin(-1 * theta) * point.y,
+    y: Math.sin(-1 * theta) * point.x + Math.cos(-1 * theta) * point.y
   }));
 };

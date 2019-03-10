@@ -2,10 +2,15 @@
   "name": "curve-matcher",
   "version": "0.0.0",
   "description": "",
-  "keywords": [],
-  "main": "dist/curve-matcher.umd.js",
-  "module": "dist/curve-matcher.es5.js",
-  "typings": "dist/types/curve-matcher.d.ts",
+  "keywords": [
+    "frechet distance",
+    "procrustes analysis",
+    "curve matching",
+    "shape matching"
+  ],
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es5.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
