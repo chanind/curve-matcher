@@ -1,9 +1,9 @@
 import frechetDistance from './frechetDistance';
 import { Curve, curveLength, rotateCurve } from './geometry';
 import {
+  findProcrustesRotationAngle,
   procrustesNormalizeCurve,
-  procrustesNormalizeRotation,
-  findProcrustesRotationAngle
+  procrustesNormalizeRotation
 } from './procrustesAnalysis';
 
 export interface ShapeSimilarityOpts {
