@@ -29,14 +29,4 @@ jobs:
       - run: yarn build
       - run: yarn test
       - run: yarn report-coverage
-
-  docs:
-    branches:
-      only:
-        - master
-    steps:
-      - checkout
-      - <<: *restore_cache
-      - run: yarn install
-      - run: yarn build
-      - run: yarn deploy-docs
+      - run: if [ "$CIRCLE_BRANCH" = "master" ]; then yarn deploy-docs; fi
