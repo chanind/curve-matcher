@@ -1,12 +1,16 @@
 import {
   Curve,
-  rotateCurve,
-  ITranslateAndScaleCurveOpts,
+  Point,
   rebalanceCurve,
-  subtract,
-  Point
+  rotateCurve,
+  subtract
 } from './geometry';
-import { arrSum, arrAverage, arrLast } from './utils';
+import { arrAverage, arrLast, arrSum } from './utils';
+
+export interface ProcrustesNormalizeCurveOpts {
+  rebalance?: boolean;
+  estimationPoints?: number;
+}
 
 /**
  * Translate and scale curve by Procrustes Analysis
@@ -18,13 +22,10 @@ import { arrSum, arrAverage, arrLast } from './utils';
  */
 export const procrustesNormalizeCurve = (
   curve: Curve,
-  {
-    rebalance = true,
-    numRebalancePoints = 50
-  }: ITranslateAndScaleCurveOpts = {}
+  { rebalance = true, estimationPoints = 50 }: ProcrustesNormalizeCurveOpts = {}
 ) => {
   const balancedCurve = rebalance
-    ? rebalanceCurve(curve, { numPoints: numRebalancePoints })
+    ? rebalanceCurve(curve, { numPoints: estimationPoints })
     : curve;
   const meanX = arrAverage(balancedCurve.map(point => point.x));
   const meanY = arrAverage(balancedCurve.map(point => point.y));

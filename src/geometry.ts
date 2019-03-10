@@ -1,11 +1,11 @@
-import { arrAverage, arrLast, arrSum } from './utils';
+import { arrLast } from './utils';
 
 export interface Point {
   x: number;
   y: number;
 }
 
-export type Curve = Array<Point>;
+export type Curve = Point[];
 
 export const subtract = (v1: Point, v2: Point): Point => ({
   x: v1.x - v2.x,
@@ -15,14 +15,14 @@ export const subtract = (v1: Point, v2: Point): Point => ({
 const magnitude = (vector: Point) =>
   Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
 
-export const distance = (point1: Point, point2: Point) =>
+export const pointDistance = (point1: Point, point2: Point) =>
   magnitude(subtract(point1, point2));
 
 export const curveLength = (points: Curve) => {
   let lastPoint = points[0];
   const pointsSansFirst = points.slice(1);
   return pointsSansFirst.reduce((acc, point) => {
-    const dist = distance(point, lastPoint);
+    const dist = pointDistance(point, lastPoint);
     lastPoint = point;
     return acc + dist;
   }, 0);
@@ -40,7 +40,7 @@ export const extendPointOnLine = (p1: Point, p2: Point, dist: number) => {
   return { x: p2.x + norm * vect.x, y: p2.y + norm * vect.y };
 };
 
-export interface ISubdivideCurveOpts {
+export interface SubdivideCurveOpts {
   maxLen?: number;
 }
 
@@ -51,12 +51,12 @@ export interface ISubdivideCurveOpts {
  */
 export const subdivideCurve = (
   curve: Curve,
-  { maxLen = 0.05 }: ISubdivideCurveOpts
+  { maxLen = 0.05 }: SubdivideCurveOpts
 ): Curve => {
   const newCurve = curve.slice(0, 1);
   curve.slice(1).forEach(point => {
     const prevPoint = newCurve[newCurve.length - 1];
-    const segLen = distance(point, prevPoint);
+    const segLen = pointDistance(point, prevPoint);
     if (segLen > maxLen) {
       const numNewPoints = Math.ceil(segLen / maxLen);
       const newSegLen = segLen / numNewPoints;
@@ -72,7 +72,7 @@ export const subdivideCurve = (
   return newCurve;
 };
 
-export interface IRebalanceCurveOpts {
+export interface RebalanceCurveOpts {
   numPoints?: number;
 }
 
@@ -84,7 +84,7 @@ export interface IRebalanceCurveOpts {
  */
 export const rebalanceCurve = (
   curve: Curve,
-  { numPoints = 50 }: IRebalanceCurveOpts
+  { numPoints = 50 }: RebalanceCurveOpts
 ): Curve => {
   const curveLen = curveLength(curve);
   const segmentLen = curveLen / (numPoints - 1);
@@ -96,7 +96,7 @@ export const rebalanceCurve = (
     let remainingDist = segmentLen;
     let outlinePointFound = false;
     while (!outlinePointFound) {
-      const nextPointDist = distance(lastPoint, remainingCurvePoints[0]);
+      const nextPointDist = pointDistance(lastPoint, remainingCurvePoints[0]);
       if (nextPointDist < remainingDist) {
         remainingDist -= nextPointDist;
         lastPoint = remainingCurvePoints.shift() as Point;
@@ -114,11 +114,6 @@ export const rebalanceCurve = (
   outlinePoints.push(endPoint);
   return outlinePoints;
 };
-
-export interface ITranslateAndScaleCurveOpts {
-  rebalance?: boolean;
-  numRebalancePoints?: number;
-}
 
 /**
  * Rotate the curve around the origin

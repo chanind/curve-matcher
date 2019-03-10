@@ -1,4 +1,4 @@
-import frechetDist from '../src/frechetDist';
+import frechetDistance from '../src/frechetDistance';
 import { subdivideCurve } from '../src/geometry';
 
 describe('frechetDist', () => {
@@ -6,8 +6,8 @@ describe('frechetDist', () => {
     const curve1 = [{ x: 0, y: 0 }, { x: 4, y: 4 }];
     const curve2 = [{ x: 0, y: 0 }, { x: 4, y: 4 }];
 
-    expect(frechetDist(curve1, curve2)).toBe(0);
-    expect(frechetDist(curve2, curve1)).toBe(0);
+    expect(frechetDistance(curve1, curve2)).toBe(0);
+    expect(frechetDistance(curve2, curve1)).toBe(0);
   });
 
   it('less than then max length of any segment if curves are identical', () => {
@@ -15,19 +15,19 @@ describe('frechetDist', () => {
     const curve2 = [{ x: 0, y: 0 }, { x: 4, y: 4 }];
 
     expect(
-      frechetDist(
+      frechetDistance(
         subdivideCurve(curve1, { maxLen: 0.5 }),
         subdivideCurve(curve2, { maxLen: 0.5 })
       )
     ).toBeLessThan(0.5);
     expect(
-      frechetDist(
+      frechetDistance(
         subdivideCurve(curve1, { maxLen: 0.1 }),
         subdivideCurve(curve2, { maxLen: 0.1 })
       )
     ).toBeLessThan(0.1);
     expect(
-      frechetDist(
+      frechetDistance(
         subdivideCurve(curve1, { maxLen: 0.01 }),
         subdivideCurve(curve2, { maxLen: 0.01 })
       )
@@ -38,7 +38,7 @@ describe('frechetDist', () => {
     const curve1 = [{ x: 1, y: 0 }, { x: 4, y: 4 }];
     const curve2 = [{ x: 0, y: 0 }, { x: 4, y: 4 }];
 
-    expect(frechetDist(curve1, curve2)).toBe(1);
-    expect(frechetDist(curve2, curve1)).toBe(1);
+    expect(frechetDistance(curve1, curve2)).toBe(1);
+    expect(frechetDistance(curve2, curve1)).toBe(1);
   });
 });

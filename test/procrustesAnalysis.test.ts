@@ -1,6 +1,6 @@
 import {
-  procrustesNormalizeCurve,
   findProcrustesRotationAngle,
+  procrustesNormalizeCurve,
   procrustesNormalizeRotation
 } from '../src/procrustesAnalysis';
 
@@ -24,7 +24,7 @@ describe('procrustesNormalizeCurve', () => {
   it('can be configured to rebalance with a custom number of points', () => {
     const curve = [{ x: 0, y: 0 }, { x: 4, y: 4 }];
     const normalizedCurve = procrustesNormalizeCurve(curve, {
-      numRebalancePoints: 3
+      estimationPoints: 3
     });
     (expect(normalizedCurve) as any).toBeDeepCloseTo([
       { x: (-1 * Math.sqrt(3)) / 2, y: (-1 * Math.sqrt(3)) / 2 },
