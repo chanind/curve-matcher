@@ -1,11 +1,12 @@
 # Curve Matcher
 
-A Javascript library for doing curve matching with Fréchet distance and Procrustes analysis. Curve matcher was extracted from [Hanzi Writer](https://chanind.github.io/hanzi-writer).
-
 [![CircleCI](https://circleci.com/gh/chanind/curve-matcher/tree/master.svg?style=shield)](https://circleci.com/gh/chanind/curve-matcher/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/chanind/curve-matcher/badge.svg?branch=master)](https://coveralls.io/github/chanind/curve-matcher?branch=master)
 [![npm](https://badgen.net/npm/v/curve-matcher)](https://www.npmjs.com/package/curve-matcher)
 [![license](https://badgen.net/npm/license/curve-matcher)](https://opensource.org/licenses/MIT)
+
+
+A Javascript library for doing curve matching with Fréchet distance and Procrustes analysis.
 
 ## Installation
 
@@ -126,6 +127,8 @@ const rotatedCurve1 = procrustesNormalizeRotation(
 );
 ```
 
+You can read more about these algorithms here: https://en.wikipedia.org/wiki/Procrustes_analysis
+
 ## Full API and Typescript docs
 
 You can find the full API and docs at https://chanind.github.io/curve-matcher
@@ -148,4 +151,12 @@ Make and commit your changes. Make sure the commands yarn run build and yarn run
 
 Finally send a [GitHub Pull Request](https://github.com/chanind/curve-matcher/compare?expand=1) with a clear list of what you've done. Make sure all of your commits are atomic (one feature per commit). Please add tests for any features that you add or change.
 
-## Happy curve matching!
+## Sources
+
+Curve matcher was extracted from stroke matching code in [Hanzi Writer](https://chanind.github.io/hanzi-writer).
+
+Procrustes analysis algorithms are from https://en.wikipedia.org/wiki/Procrustes_analysis
+
+Discrete Fréchet distance algorithm is from [Computing Discrete Fréchet Distance](http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf)
+
+**Happy curve matching!**
