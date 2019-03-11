@@ -1,6 +1,6 @@
 {
   "name": "curve-matcher",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "description": "Curve matching using Fréchet distance and Procrustes analysis in JS",
   "keywords": [
     "frechet distance",
