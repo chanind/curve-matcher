@@ -15,6 +15,10 @@ jobs:
 
     working_directory: ~/repo
 
+    branches:
+      ignore:
+        - /^v\d+\.\d+\.\d+$/
+
     steps:
       - checkout
       - <<: *restore_cache
@@ -30,3 +34,4 @@ jobs:
       - run: yarn test
       - run: yarn report-coverage
       - run: if [ "$CIRCLE_BRANCH" = "master" ]; then yarn deploy-docs; fi
+      - run: if [ "$CIRCLE_BRANCH" = "master" ]; then yarn semantic-release; fi
