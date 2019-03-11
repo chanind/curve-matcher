@@ -5,7 +5,7 @@ import {
   rotateCurve,
   subtract
 } from './geometry';
-import { arrAverage, arrLast, arrSum } from './utils';
+import { arrAverage, arrSum } from './utils';
 
 export interface ProcrustesNormalizeCurveOpts {
   rebalance?: boolean;

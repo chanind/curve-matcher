@@ -6,6 +6,7 @@
   ],
   "rules": {
     "ordered-imports": true,
-    "no-increment-decrement": false
+    "no-increment-decrement": false,
+    "no-unused-variable": true
   }
 }
