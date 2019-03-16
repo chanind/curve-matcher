@@ -24,7 +24,11 @@ npm install curve-matcher
 
 ## Getting started
 
-The core of `curve-matcher` is a function called `shapeSimilarity` which estimates how similar the shapes of 2 curves are to each other, returning a value between `0` and `1`. Curves are defined as arrays of points of `x` and `y` like below:
+The core of `curve-matcher` is a function called `shapeSimilarity` which estimates how similar the shapes of 2 curves are to each other, returning a value between `0` and `1`.
+
+![shapeSimilarity example curves](http://misc-cdn-assets.s3-us-west-2.amazonaws.com/shape_similarity.png)
+
+Curves are defined as arrays of points of `x` and `y` like below:
 
 ```javascript
 const curve = [{x: 2, y: 1.5}, {x: 4, y: 3}, ... ];
