@@ -46,6 +46,38 @@ describe('shapeSimilarity', () => {
     });
   });
 
+  it('allows restricting the rotation angles that are checked', () => {
+    const curve = [{ x: 0, y: 0 }, { x: 2, y: 4 }, { x: 18, y: -3 }];
+    const withinRangeRotations = [0, -0.2, -0.3, 0.2, 0.3];
+    const outOfRangeRotations = [-0.5, 0.5, Math.PI];
+    translations.forEach(translation => {
+      scales.forEach(scale => {
+        withinRangeRotations.forEach(theta => {
+          const newCurve = translateScaleAndRotate(
+            curve,
+            translation,
+            scale,
+            theta
+          );
+          expect(
+            shapeSimilarity(curve, newCurve, { restrictRotationAngle: 0.3 })
+          ).toBeCloseTo(1);
+        });
+        outOfRangeRotations.forEach(theta => {
+          const newCurve = translateScaleAndRotate(
+            curve,
+            translation,
+            scale,
+            theta
+          );
+          expect(
+            shapeSimilarity(curve, newCurve, { restrictRotationAngle: 0.3 })
+          ).toBeLessThan(0.9);
+        });
+      });
+    });
+  });
+
   it('returns close to 1 if curves have similar shapes', () => {
     const curve1 = [{ x: 0, y: 0 }, { x: 2, y: 4 }, { x: 18, y: -3 }];
     const curve2 = [{ x: 0.3, y: -0.2 }, { x: 2.2, y: 4.5 }, { x: 16, y: -4 }];
@@ -103,6 +135,6 @@ describe('shapeSimilarity', () => {
   it('should be really close to 0 for very dissimilar shapes', () => {
     const curve1 = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 0 }];
     const curve2 = [{ x: 0, y: 0 }, { x: 1, y: 1 }];
-    expect(shapeSimilarity(curve1, curve2)).toBeLessThan(0.2);
+    expect(shapeSimilarity(curve1, curve2)).toBeLessThan(0.25);
   });
 });

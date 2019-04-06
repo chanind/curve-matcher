@@ -7,7 +7,9 @@ import {
 
 export interface ShapeSimilarityOpts {
   estimationPoints?: number;
+  checkRotations?: boolean;
   rotations?: number;
+  restrictRotationAngle?: number;
 }
 
 /**
@@ -23,7 +25,15 @@ export const shapeSimilarity = (
   curve2: Curve,
   options: ShapeSimilarityOpts = {}
 ): number => {
-  const { estimationPoints = 50, rotations = 10 } = options;
+  const {
+    estimationPoints = 50,
+    rotations = 10,
+    restrictRotationAngle = Math.PI,
+    checkRotations = true
+  } = options;
+  if (Math.abs(restrictRotationAngle) > Math.PI) {
+    throw new Error('restrictRotationAngle cannot be larger than PI');
+  }
   const normalizedCurve1 = procrustesNormalizeCurve(curve1, {
     estimationPoints
   });
@@ -35,13 +45,32 @@ export const shapeSimilarity = (
     curveLength(normalizedCurve1) * curveLength(normalizedCurve2)
   );
 
-  const procrustesTheta = findProcrustesRotationAngle(
-    normalizedCurve1,
-    normalizedCurve2
-  );
-  const thetasToCheck = [procrustesTheta];
-  for (let i = 0; i < rotations; i++) {
-    thetasToCheck.push((2 * Math.PI * i) / rotations);
+  const thetasToCheck = [0];
+
+  if (checkRotations) {
+    let procrustesTheta = findProcrustesRotationAngle(
+      normalizedCurve1,
+      normalizedCurve2
+    );
+    // use a negative rotation rather than a large positive rotation
+    if (procrustesTheta > Math.PI) {
+      procrustesTheta = procrustesTheta - 2 * Math.PI;
+    }
+    if (
+      procrustesTheta !== 0 &&
+      Math.abs(procrustesTheta) < restrictRotationAngle
+    ) {
+      thetasToCheck.push(procrustesTheta);
+    }
+    for (let i = 0; i < rotations; i++) {
+      const theta =
+        -1 * restrictRotationAngle +
+        (2 * i * restrictRotationAngle) / (rotations - 1);
+      // 0 and Math.PI are already being checked, no need to check twice
+      if (theta !== 0 && theta !== Math.PI) {
+        thetasToCheck.push(theta);
+      }
+    }
   }
 
   let minFrechetDist = Infinity;
