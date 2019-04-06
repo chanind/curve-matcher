@@ -55,6 +55,16 @@ shapeSimilary(curve1, curve2, { estimationPoints: 200, rotations: 30 });
 shapeSimilary(curve1, curve2, { estimationPoints: 10, rotations: 0 });
 ```
 
+You can also restrict the range of rotations that are checked using the `restrictRotationAngle` option. This option means the shapeSimilarity function will only check rotations within +- `restrictRotationAngle` radians. If you'd like to disable rotation correction entirely, you can set `checkRotations: false`. These are shown below:
+
+```javascript
+// Only check rotations between -0.1 π to 0.1 π
+shapeSimilary(curve1, curve2, { restrictRotationAngle: 0.1 * Math.PI });
+
+// disable rotation correction entirely
+shapeSimilary(curve1, curve2, { checkRotations: false });
+```
+
 ## How it works
 
 Internally, `shapeSimilary` works by first normalizing the curves using [Procrustes analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) and then calculating [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance) between the curves.
