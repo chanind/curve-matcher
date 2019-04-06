@@ -78,6 +78,19 @@ describe('shapeSimilarity', () => {
     });
   });
 
+  it('errors if restrictRotationAngle is invalid', () => {
+    const curve = [{ x: 0, y: 0 }, { x: 2, y: 4 }];
+    expect(() =>
+      shapeSimilarity(curve, curve, { restrictRotationAngle: 340 })
+    ).toThrowError('restrictRotationAngle cannot be larger than PI');
+    expect(() =>
+      shapeSimilarity(curve, curve, { restrictRotationAngle: 3 * Math.PI })
+    ).toThrowError('restrictRotationAngle cannot be larger than PI');
+    expect(() =>
+      shapeSimilarity(curve, curve, { restrictRotationAngle: -1.1 * Math.PI })
+    ).toThrowError('restrictRotationAngle cannot be larger than PI');
+  });
+
   it('returns close to 1 if curves have similar shapes', () => {
     const curve1 = [{ x: 0, y: 0 }, { x: 2, y: 4 }, { x: 18, y: -3 }];
     const curve2 = [{ x: 0.3, y: -0.2 }, { x: 2.2, y: 4.5 }, { x: 16, y: -4 }];

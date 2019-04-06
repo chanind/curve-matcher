@@ -37,10 +37,10 @@ const curve = [{x: 2, y: 1.5}, {x: 4, y: 3}, ... ];
 calculating similarity between 2 curves is as simple as calling:
 
 ```javascript
-import { shapeSimilary } from 'curve-matcher';
+import { shapeSimilarity } from 'curve-matcher';
 
 // 1 means identical shape, 0 means very different shapes
-const similarity = shapeSimilary(curve1, curve2);
+const similarity = shapeSimilarity(curve1, curve2);
 ```
 
 `shapeSimilarity` automatically adjusts for rotation, scale, and translation differences between so it doesn't matter if the curves are different sizes or in different locations on the screen - as long as they have the same shape the similarity score will be close to `1`.
@@ -49,32 +49,32 @@ You can further customize the accuracy of the `shapeSimilarity` function by chan
 
 ```javascript
 // higher accuracy, but slower
-shapeSimilary(curve1, curve2, { estimationPoints: 200, rotations: 30 });
+shapeSimilarity(curve1, curve2, { estimationPoints: 200, rotations: 30 });
 
 // lower accuracy, but faster
-shapeSimilary(curve1, curve2, { estimationPoints: 10, rotations: 0 });
+shapeSimilarity(curve1, curve2, { estimationPoints: 10, rotations: 0 });
 ```
 
 You can also restrict the range of rotations that are checked using the `restrictRotationAngle` option. This option means the shapeSimilarity function will only check rotations within +- `restrictRotationAngle` radians. If you'd like to disable rotation correction entirely, you can set `checkRotations: false`. These are shown below:
 
 ```javascript
 // Only check rotations between -0.1 π to 0.1 π
-shapeSimilary(curve1, curve2, { restrictRotationAngle: 0.1 * Math.PI });
+shapeSimilarity(curve1, curve2, { restrictRotationAngle: 0.1 * Math.PI });
 
 // disable rotation correction entirely
-shapeSimilary(curve1, curve2, { checkRotations: false });
+shapeSimilarity(curve1, curve2, { checkRotations: false });
 ```
 
 ## How it works
 
-Internally, `shapeSimilary` works by first normalizing the curves using [Procrustes analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) and then calculating [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance) between the curves.
+Internally, `shapeSimilarity` works by first normalizing the curves using [Procrustes analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) and then calculating [Fréchet distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance) between the curves.
 
 Procrustes analysis attempts to translate both the curves to the origin and adjust their scale so they're the same size. Then, it rotates the curves so their rotations are as close as possible.
 
 In practice, Procrustes analysis has 2 issues which curve-matcher works to address.
-First, it's very dependent on how the points of the curve are spaced apart from each other. To account for this, `shapeSimilary` first redraws each curve using 50 (by default) points equally spaced out along the length of the curve. In addition, Procrustes analysis sometimes doesn't choose the best rotation if curves are not that similar to each other, so `shapeSimilary` also tries 10 (by default) equally spaced rotations to make sure it picks the best possible rotation normalization. You can adjust these parameters via the `estimationPoints` and `rotations` options to `shapeSimilarity`.
+First, it's very dependent on how the points of the curve are spaced apart from each other. To account for this, `shapeSimilarity` first redraws each curve using 50 (by default) points equally spaced out along the length of the curve. In addition, Procrustes analysis sometimes doesn't choose the best rotation if curves are not that similar to each other, so `shapeSimilarity` also tries 10 (by default) equally spaced rotations to make sure it picks the best possible rotation normalization. You can adjust these parameters via the `estimationPoints` and `rotations` options to `shapeSimilarity`.
 
-If you'd like to implement your own version of `shapeSimilary` there's a number of helper methods that are exported by `curve-matcher` which you can use as well, discussed below:
+If you'd like to implement your own version of `shapeSimilarity` there's a number of helper methods that are exported by `curve-matcher` which you can use as well, discussed below:
 
 ## Fréchet distance
 
