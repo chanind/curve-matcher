@@ -7,44 +7,46 @@ import { Curve, pointDistance } from './geometry';
  * @param curve2
  */
 const frechetDist = (curve1: Curve, curve2: Curve) => {
-  const results: number[][] = [];
-  for (let i = 0; i < curve1.length; i++) {
-    results.push([]);
-    for (let j = 0; j < curve2.length; j++) {
-      results[i].push(-1);
-    }
-  }
-
-  const recursiveCalc = (i: number, j: number) => {
-    if (results[i][j] > -1) return results[i][j];
+  const longCurve = curve1.length >= curve2.length ? curve1 : curve2;
+  const shortCurve = curve1.length >= curve2.length ? curve2 : curve1;
+  const calcVal = (
+    i: number,
+    j: number,
+    prevResultsCol: number[],
+    curResultsCol: number[]
+  ): number => {
     if (i === 0 && j === 0) {
-      results[i][j] = pointDistance(curve1[0], curve2[0]);
-    } else if (i > 0 && j === 0) {
-      results[i][j] = Math.max(
-        recursiveCalc(i - 1, 0),
-        pointDistance(curve1[i], curve2[0])
-      );
-    } else if (i === 0 && j > 0) {
-      results[i][j] = Math.max(
-        recursiveCalc(0, j - 1),
-        pointDistance(curve1[0], curve2[j])
-      );
-    } else if (i > 0 && j > 0) {
-      results[i][j] = Math.max(
-        Math.min(
-          recursiveCalc(i - 1, j),
-          recursiveCalc(i - 1, j - 1),
-          recursiveCalc(i, j - 1)
-        ),
-        pointDistance(curve1[i], curve2[j])
-      );
-    } else {
-      results[i][j] = Infinity;
+      return pointDistance(longCurve[0], shortCurve[0]);
     }
-    return results[i][j];
+    if (i > 0 && j === 0) {
+      return Math.max(
+        prevResultsCol[0],
+        pointDistance(longCurve[i], shortCurve[0])
+      );
+    }
+    const lastResult = curResultsCol[curResultsCol.length - 1];
+    if (i === 0 && j > 0) {
+      return Math.max(lastResult, pointDistance(longCurve[0], shortCurve[j]));
+    }
+    if (i > 0 && j > 0) {
+      return Math.max(
+        Math.min(prevResultsCol[j], prevResultsCol[j - 1], lastResult),
+        pointDistance(longCurve[i], shortCurve[j])
+      );
+    }
+    return Infinity;
   };
 
-  return recursiveCalc(curve1.length - 1, curve2.length - 1);
+  let prevResultsCol: number[] = [];
+  for (let i = 0; i < longCurve.length; i++) {
+    const curResultsCol: number[] = [];
+    for (let j = 0; j < shortCurve.length; j++) {
+      curResultsCol.push(calcVal(i, j, prevResultsCol, curResultsCol));
+    }
+    prevResultsCol = curResultsCol;
+  }
+
+  return prevResultsCol[shortCurve.length - 1];
 };
 
 export default frechetDist;

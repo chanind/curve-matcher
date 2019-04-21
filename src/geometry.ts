@@ -13,8 +13,7 @@ export const subtract = (v1: Point, v2: Point): Point => ({
   y: v1.y - v2.y
 });
 
-const magnitude = (vector: Point) =>
-  Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+const magnitude = ({ x, y }: Point) => Math.sqrt(x * x + y * y);
 
 /**
  * Calculate the distance between 2 points
