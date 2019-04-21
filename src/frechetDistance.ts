@@ -4,8 +4,6 @@ import { Curve, pointDistance } from './geometry';
  * Discrete Frechet distance between 2 curves
  * based on http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf
  * modified to be iterative and have better memory usage
- * @param curve1
- * @param curve2
  */
 const frechetDist = (curve1: Curve, curve2: Curve) => {
   const longCurve = curve1.length >= curve2.length ? curve1 : curve2;
